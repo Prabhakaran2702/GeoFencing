@@ -291,13 +291,13 @@ class TrackingService : Service {
 
         calculateGeoFencing(actualLatitude,actualLongitude)
 
-     //   Log.d("Geo Fencing", "Check - ${actualLatitude} && ${actualLongitude}")
-
     }
 
     private fun calculateGeoFencing(lat: Double, lon: Double) {
 
-        gpsLocations.forEach {
+
+        if(gpsLocations.isNotEmpty()){
+            var it = gpsLocations[0]
 
             Log.d("gpsLocations ->", "$it")
 
@@ -322,14 +322,17 @@ class TrackingService : Service {
                             showNotificationForTest("Location: ${it.id} exited")
                             it.isExisted = true
                             it.isTracked = true
+                            gpsLocations.remove(it)
                         }
                     }
                 }
             }
 
-            else{
-                disableGeoFencing = checkToDisableGeoFencing()
-            }
+        }
+
+        else{
+            disableGeoFencing = true
+            Log.d("Geo Fencing","All the locations are tracked & Geo fencing is disabled.")
         }
 
     }
